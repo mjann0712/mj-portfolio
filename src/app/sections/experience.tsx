@@ -20,21 +20,21 @@ export default function Experience(){
           <div className="mt-10 space-y-8">
             {[
               {
-                role: "Front-End Developer",
-                company: "Pensionne Estela",
-                project: "E-stella",
-                duration: "2024",
-                description:
-                  "Developed web application using Bootstrap and Laravel as the framework of the system, ensuring responsive and user-friendly interfaces.",
-              },
-              {
                 role: "Intern/OJT - UI/UX Designer",
                 company:
                   "Benguet State University - Project Leader on Precision Agriculture",
                 project: "E-abono",
                 duration: "Jan 2025 - present",
                 description:
-                  "Assisted in the development of company websites, optimized UI components, and contributed to UX research and design enhancements.",
+                  "Assisted in the development of the project, optimized UI components, and contributed to UX research and design enhancements.",
+              }, 
+              {
+                role: "Front-End Developer",
+                company: "Pensionne Estela",
+                project: "E-stella",
+                duration: "2024",
+                description:
+                  "Developed web application using Bootstrap and Laravel as the framework of the system, ensuring responsive and user-friendly interfaces.",
               },
             ].map(
               ({ role, company, project, duration, description }, index) => (
