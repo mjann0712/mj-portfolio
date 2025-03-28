@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   FaGithub,
   FaEnvelope,
@@ -12,9 +13,28 @@ import {
   FaLaravel,
   FaFacebook,
   FaPhp,
+  FaLinkedin,
 } from "react-icons/fa";
 
-export default function hero() {
+export default function Hero() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = document.getElementById("home");
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.75) {
+          setIsVisible(true);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       {/* Hero Section */}
@@ -22,31 +42,56 @@ export default function hero() {
         id="home"
         className="min-h-screen flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16 py-10 bg-gradient-to-b from-gray-900 to-gray-900"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: isVisible ? 1 : 0 }}
         transition={{ duration: 1 }}
       >
+        {/* Profile Image */}
         <motion.img
           src="/images/mj.jpg"
           alt="Profile"
           className="mt-20 sm:mt-6 md:mt-8 lg:mt-10 w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full shadow-xl mb-6 object-cover border-4 border-orange-500"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: isVisible ? 1 : 0, scale: isVisible ? 1 : 0.8 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           whileHover={{ scale: 1.1, rotate: 5 }}
         />
 
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
+        {/* Name */}
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -20 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
           MARY JOYCE ANN GALLIGUEZ
-        </h1>
+        </motion.h1>
 
-        <p className="text-lg mt-3 text-gray-400">
-          UI/UX Designer | Front End Web Developer
-        </p>
+        {/* Title */}
+        <motion.p
+          className="text-lg mt-3 text-gray-400"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          UI/UX Designer | Front-End Web Developer
+        </motion.p>
 
         {/* Social Links */}
-        <div className="flex space-x-4 sm:space-x-6 mt-6">
+        <motion.div
+          className="flex space-x-4 sm:space-x-6 mt-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           {[
             { icon: FaGithub, link: "https://github.com/mjann0712" },
             {
               icon: FaFacebook,
               link: "https://www.facebook.com/mjanngalliguez",
+            },
+            {
+              icon: FaLinkedin,
+              link: "https://www.linkedin.com/in/mary-joyce-ann-galliguez",
             },
             { icon: FaEnvelope, link: "mailto:mjanngalliguez77@gmail.com" },
           ].map(({ icon: Icon, link }, index) => (
@@ -61,10 +106,15 @@ export default function hero() {
               <Icon />
             </motion.a>
           ))}
-        </div>
+        </motion.div>
 
         {/* Skills Section */}
-        <div className="max-w-4xl mx-auto px-6 mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-gray-300">
+        <motion.div
+          className="max-w-4xl mx-auto px-6 mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-gray-300"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isVisible ? 1 : 0 }}
+          transition={{ duration: 1, delay: 0.8 }}
+        >
           {[
             { name: "HTML", icon: FaHtml5 },
             { name: "CSS", icon: FaCss3Alt },
@@ -73,31 +123,27 @@ export default function hero() {
             { name: "Tailwind CSS", icon: FaWind },
             { name: "Bootstrap", icon: FaBootstrap },
             { name: "Laravel", icon: FaLaravel },
-            { name: "Github", icon: FaGithub },
+            { name: "GitHub", icon: FaGithub },
             { name: "Figma", icon: FaFigma },
             { name: "PHP", icon: FaPhp },
           ].map(({ name, icon: Icon }, index) => (
             <motion.div
               key={name}
+              className="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-center space-x-4 h-20 transition-all"
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{
                 scale: 1.1,
                 backgroundColor: "#1F2937",
                 boxShadow: "0 0 10px rgba(255,165,0,0.5)",
               }}
-              transition={{
-                duration: 0.2,
-                ease: "easeInOut",
-                delay: index * 0.05,
-              }}
-              className="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-center space-x-4 h-20 transition-all"
             >
               <Icon className="text-orange-500 text-2xl" />
               <span>{name}</span>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </motion.section>
     </>
   );

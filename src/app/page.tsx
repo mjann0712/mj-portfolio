@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Import sections
 import Project from "./sections/project";
 import Hero from "./sections/hero";
 import About from "./sections/about";
@@ -14,13 +16,38 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
   const [showNav, setShowNav] = useState(false);
 
-  // Handle scroll effect for navbar
   useEffect(() => {
     const handleScroll = () => {
       setScrolling(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Function to detect the active section
+  useEffect(() => {
+    const sections = document.querySelectorAll("section");
+    const options = {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.6, // 60% of the section must be visible to be considered active
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, options);
+
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   // Navbar animation variants
@@ -30,40 +57,46 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="bg-gray-900 text-gray-100 min-h-screen font-sans">
+    <div className="bg-gray-800 text-gray-100 min-h-screen font-sans">
       {/* Desktop Navbar */}
       <motion.nav
         variants={navVariants}
         initial="hidden"
         animate="visible"
-        className={`hidden sm:fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] lg:w-[60%] 
-                bg-gray-800 bg-opacity-70 backdrop-blur-lg text-white py-4 px-6 
-                lg:flex justify-between items-center z-50 shadow-lg rounded-full 
-                border border-gray-700 transition-all duration-500 ${scrolling ? "bg-opacity-90 backdrop-blur-md shadow-orange-400/50" : ""}`}
+        className={`hidden sm:fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-[85%] lg:w-[60%] 
+          bg-gray-800 bg-opacity-70 backdrop-blur-lg text-white py-2 sm:py-2 lg:py-3 px-6 
+          text-xs sm:text-sm lg:text-base lg:flex justify-center items-center text-center 
+          z-50 shadow-lg rounded-full border border-gray-800 transition-all duration-500 ${
+            scrolling ? "bg-opacity-90 backdrop-blur-md shadow-orange-400/50" : ""
+          }`}
       >
-        <div className="space-x-5 flex items-center justify-center">
-          <div className="text-xl font-semibold text-orange-400">My Portfolio</div>
-          <div className="hidden lg:flex space-x-6 ml-10">
-            {["home", "about", "projects", "experiences", "contact"].map((section) => (
-              <motion.a
-                key={section}
-                href={`#${section}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
-                  setActiveSection(section);
-                }}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-                className={`transition duration-300 text-sm md:text-lg px-4 py-2 md:px-6 md:py-3 rounded-full flex items-center 
-                    font-medium tracking-wide capitalize ${activeSection === section
-                      ? "bg-orange-400 text-gray-900 font-bold shadow-md shadow-orange-500"
-                      : "hover:text-orange-400 hover:bg-gray-700 hover:bg-opacity-40"
-                    }`}
-              >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
-              </motion.a>
-            ))}
+        <div className="space-x-3 flex items-center justify-center">
+          <div className="hidden md:flex space-x-4 ml-4">
+            {["home", "about", "projects", "experiences", "contact"].map(
+              (section) => (
+                <motion.a
+                  key={section}
+                  href={`#${section}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById(section)
+                      ?.scrollIntoView({ behavior: "smooth" });
+                    setActiveSection(section);
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  className={`transition duration-300 text-base lg:text-lg px-3 py-2 md:px-4 md:py-3 rounded-full flex items-center 
+          font-medium tracking-wide capitalize ${
+            activeSection === section
+              ? "bg-orange-400 text-gray-900 font-bold shadow-md shadow-orange-500"
+              : "hover:text-orange-400 hover:bg-gray-700 hover:bg-opacity-40"
+          }`}
+                >
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </motion.a>
+              )
+            )}
           </div>
         </div>
       </motion.nav>
@@ -117,27 +150,32 @@ export default function Portfolio() {
               />
             </div>
 
-            {["home", "about", "projects", "experiences", "contact"].map((section) => (
-              <motion.a
-                key={section}
-                href={`#${section}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById(section)?.scrollIntoView({ behavior: "smooth" });
-                  setShowNav(false);
-                  setActiveSection(section);
-                }}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-                className={`text-xl font-medium capitalize px-6 py-3 rounded-md w-full text-center
-                    ${activeSection === section
-                      ? "bg-orange-400 text-gray-900 font-bold"
-                      : "hover:text-orange-400 hover:bg-gray-700"
+            {["home", "about", "projects", "experiences", "contact"].map(
+              (section) => (
+                <motion.a
+                  key={section}
+                  href={`#${section}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById(section)
+                      ?.scrollIntoView({ behavior: "smooth" });
+                    setShowNav(false);
+                    setActiveSection(section);
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                  className={`text-xl font-medium capitalize px-6 py-3 rounded-md w-full text-center
+                    ${
+                      activeSection === section
+                        ? "bg-orange-400 text-gray-900 font-bold"
+                        : "hover:text-orange-400 hover:bg-gray-700"
                     }`}
-              >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
-              </motion.a>
-            ))}
+                >
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
+                </motion.a>
+              )
+            )}
           </motion.nav>
         )}
       </AnimatePresence>
